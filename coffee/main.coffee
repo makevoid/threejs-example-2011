@@ -2,6 +2,7 @@
 container = $ "#container"
 renderer = new THREE.WebGLRenderer()
 # renderer.shadowMapEnabled = true;
+renderer.antialias = true
 
 width = $(window).width()
 heigth = $(window).height()
@@ -9,6 +10,8 @@ aspect = width / heigth
                                    # view_angle, aspect,  near, far
 camera = new THREE.PerspectiveCamera 45, aspect,  1, 100000
 scene = new THREE.Scene()
+scene.background = new THREE.Color( 0xffffff )
+
 camera.position.z = 0
 renderer.setSize width, heigth
 container.append renderer.domElement
@@ -30,23 +33,14 @@ random_choose = (array) ->
 
 
 add_cube = (scene) ->
-  # color = $.xcolor.random()
-  color = $.xcolor.greyfilter('#777777');
-  # color = random_choose $.xcolor.tetrad('#FF6666')
-  cubeMaterial = new THREE.MeshLambertMaterial { color: color.getInt() }
-
   cube_geom = new THREE.CubeGeometry(200,200,200)
-  geom =  cube_geom
-  cube = new THREE.Mesh( geom, cubeMaterial )
-  basicMaterial = new THREE.MeshBasicMaterial({color: color.getInt()})
-  line = new THREE.Line geom, basicMaterial
-
-  cube = new THREE.Mesh cube_geom, basicMaterial
-
+  cubeMaterials = new THREE.MeshBasicMaterial({color:0x555555, transparent:true, opacity:0.8, side: THREE.DoubleSide})
+  cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials)
+  cube = new THREE.Mesh cube_geom, cubeMaterials
   scene.add cube
   cube
 
-cubes_count = 200
+cubes_count = 150
 cubes_count--
 cubes   = []
 positions = []
@@ -124,6 +118,14 @@ set_light = ->
   pointLight.castShadow = true
   scene.add pointLight
 
+set_light2 = ->
+  pointLight = new THREE.PointLight 0xFFFFFF
+  pointLight.position.x = 3000
+  pointLight.position.y = 300
+  pointLight.position.z = 1000
+  pointLight.castShadow = true
+  scene.add pointLight
+
 # wtf? http://fhtr.org/BasicsOfThreeJS/#7
 #
 # renderer.setClearColorHex(0x222222, 1.0)
@@ -138,6 +140,7 @@ render = ->
   camera.rotation.z = 0
 
 set_light()
+set_light2()
 anim()
 
 render()
