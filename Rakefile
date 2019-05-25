@@ -8,5 +8,4 @@ task :serve do
   sh './server.sh'
 end
 
-
 task default: :run
