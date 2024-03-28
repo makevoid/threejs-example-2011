@@ -1,10 +1,5 @@
-desc "run"
+desc "run (using python 3)"
 task :run do
-  sh 'bundle exec rackup -p 3000'
-end
-
-desc "serve (using py)"
-task :serve do
   sh './server.sh'
 end
 
